@@ -4,6 +4,9 @@ from rational_number.rational_number import RationalNumber
 
 
 def main():
+    p1 = Point(2, 3)
+    p2 = Point(4, 5)
+    p3 = p1 + p2
 
     # vector1 = Vector2d(2, 3)
     # print(vector1.coords)
@@ -18,8 +21,10 @@ def main():
 
     # print(vector2.magnitude)
 
-    rational1 = RationalNumber(2, 3)
-    rational2 = RationalNumber(3, 6)
+    rational1 = RationalNumber(2, -28)
+    rational2 = RationalNumber(-6, 9)
+    print(rational1)
+    print(rational2)
     print(rational1 + rational2)
     print(rational1 - rational2)
     print(rational1 * rational2)
