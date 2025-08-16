@@ -10,6 +10,10 @@ class RationalNumber:
         Raises:
             ZeroDivisionError: If the denominator is zero.
         """
+
+        # Convert and validate the inputs into a standardized (numerator, denominator) integer pair
+        numerator, denominator = self._parse_rational_input(numerator, denominator)
+
         # Ensure denominator is not zero
         self._validate_denominator(denominator)
 
@@ -17,7 +21,7 @@ class RationalNumber:
         numerator, denominator = self._normalize_signs(numerator, denominator)
 
         # Simplify the fraction and store as immutable private attributes
-        self.__numerator, self.__denominator = self._simplified_fraction(
+        self.__numerator, self.__denominator = self._simplify_fraction(
             numerator, denominator
         )
 
@@ -32,6 +36,29 @@ class RationalNumber:
     def numerator(self):
         """Return the numerator of the rational number."""
         return self.__numerator
+
+    def _parse_rational_input(self, numerator, denominator):
+        if isinstance(numerator, RationalNumber):
+            numerator, denominator = int(numerator.numerator), int(
+                numerator.denominator
+            )
+            return numerator, denominator
+        elif isinstance(numerator, (tuple, list)):
+            numerator, denominator = int(numerator[0]), int(numerator[1])
+            return numerator, denominator
+        elif isinstance(numerator, str):
+            parts = numerator.split("/")
+            if len(parts) != 2:
+                raise ValueError(
+                    "Invalid rational number format. Expected 'numerator/denominator'."
+                )
+            else:
+                try:
+                    numerator, denominator = int(parts[0]), int(parts[1])
+                    return numerator, denominator
+                except ValueError:
+                    raise ValueError("Numerator and denominator must be integers.")
+        return numerator, denominator
 
     def _normalize_signs(self, numerator, denominator):
         """
@@ -53,7 +80,7 @@ class RationalNumber:
             raise ZeroDivisionError("Denominator should not be zero")
         return denominator
 
-    def _find_gcd(self, num1, num2):
+    def _find_gcd(self, numer, denom):
         """
         Find the greatest common divisor (GCD) of two integers using a basic method.
 
@@ -64,30 +91,37 @@ class RationalNumber:
         Returns:
             int: The greatest common divisor of num1 and num2.
         """
-        num1 = abs(num1)
-        num2 = abs(num2)
+        # Convert both numbers to absolute values for GCD calculation
+        numerator = abs(numer)
+        denominator = abs(denom)
 
-        smaller_num = num1
+        # If numerator is 0, GCD is the absolute value of denominator
+        # This prevents division by zero in subsequent logic
+        if numerator == 0:
+            return denominator
+
+        # Assume the smaller number as the initial candidate for GCD
+        smaller_num = numerator
         greatest_common_divisor = 1
 
         # Identify smaller number
-        if num1 > num2:
-            smaller_num = num2
+        if numerator > denominator:
+            smaller_num = denominator
 
         # Directly return smaller number if it divides both
-        if num1 % smaller_num == 0 and num2 % smaller_num == 0:
+        if numerator % smaller_num == 0 and denominator % smaller_num == 0:
             greatest_common_divisor = smaller_num
             return greatest_common_divisor
         else:
             # Check divisors up to half of the smaller number
             half_of_small_num = smaller_num // 2
             for i in range(2, half_of_small_num + 1):
-                if num1 % i == 0 and num2 % i == 0:
+                if numerator % i == 0 and denominator % i == 0:
                     greatest_common_divisor = i
 
             return greatest_common_divisor
 
-    def _simplified_fraction(self, numerator, denominator):
+    def _simplify_fraction(self, numerator, denominator):
         """
         Simplify a fraction by dividing numerator and denominator by their GCD.
         Args:
@@ -142,8 +176,16 @@ class RationalNumber:
 
         return RationalNumber(numerator, denominator)
 
+    def __eq__(self, other):
+        if isinstance(other, RationalNumber):
+            return (self.__numerator == other.numerator) and (
+                self.__denominator == other.denominator
+            )
+
+        return False
+
     def __str__(self):
         """
         Return string representation of the rational number in 'numerator/denominator' format.
         """
-        return f"{self.__numerator}/{self.denominator}"
+        return f"{self.__numerator}/{self.__denominator}"
