@@ -133,15 +133,3 @@ class Vector:
         return f"({str(self.__coords)[1:-1]})"
 
 
-v1 = Vector(3)
-v1[0] = 1
-v1[1] = 2
-v1[2] = 3
-print(v1.magnitude())
-v2 = Vector(3)
-v2[0] = 2
-v2[1] = 4
-v2[2] = 1
-distance = v2.distance(v1)
-dot_product = v1.dot_product(v2)
-print(dot_product)
