@@ -12,6 +12,46 @@ class Vector:
     def coords(self):
         return self.__coords
 
+    @property
+    def magnitude(self):
+        # Step 1: Square each coordinate using list comprehension
+        # List comprehension creates a new list with squares of all elements in self.__coords
+        squared_list = [a**2 for a in self.__coords]
+
+        # Step 2: Sum all squared values
+        sum_of_list = 0
+        for element in squared_list:
+            sum_of_list += element
+
+        # Step 3: Take square root of the sum to get the magnitude (Euclidean norm)
+        final_magnitude = sqrt(sum_of_list)
+
+        # Step 4: Round to 3 decimal places and return
+        return round(final_magnitude, 3)
+
+    @property
+    def unit_vector(self):
+        # Create an empty list to store the unit vector components
+        unit_list = []
+
+        # Only compute the unit vector if magnitude is non-zero
+        if self.magnitude != 0:
+            # Iterate over each coordinate in the vector
+            for i in range(len(self.__coords)):
+                # Normalize the component by dividing it by the magnitude
+                # Round result to 3 decimal places for readability
+                unit = round((self.__coords[i] / self.magnitude), 3)
+
+                # Append the normalized component to the list
+                unit_list.append(unit)
+
+            # Convert the list to an immutable tuple and return
+            return tuple(unit_list)
+
+        # If the magnitude is zero (zero vector), return a tuple of zeros
+        # with the same dimension as the original vector
+        return tuple([0] * len(self.__coords))
+
     def __setitem__(self, index, value):
         # Allows assignment like v1[2] = 7.
         # This internally updates __coords at that index.
@@ -88,22 +128,6 @@ class Vector:
         # Step 4: Round to 3 decimal places and return
         return round(final_distance, 3)
 
-    def magnitude(self):
-        # Step 1: Square each coordinate using list comprehension
-        # List comprehension creates a new list with squares of all elements in self.__coords
-        squared_list = [a**2 for a in self.__coords]
-
-        # Step 2: Sum all squared values
-        sum_of_list = 0
-        for element in squared_list:
-            sum_of_list += element
-
-        # Step 3: Take square root of the sum to get the magnitude (Euclidean norm)
-        final_magnitude = sqrt(sum_of_list)
-
-        # Step 4: Round to 3 decimal places and return
-        return round(final_magnitude, 3)
-
     def dot_product(self, other_vector):
         # Step 1: Multiply corresponding elements of the two vectors
         # - zip(self.__coords, other_vector.coords) pairs elements from both vectors
@@ -131,5 +155,3 @@ class Vector:
         # str(self.__coords) → "[1, 2, 3]" → slice [1:-1] → "1, 2, 3"
         # Final → "(1, 2, 3)".
         return f"({str(self.__coords)[1:-1]})"
-
-
