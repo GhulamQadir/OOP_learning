@@ -116,9 +116,3 @@ class Range:
     # String representation
     def __str__(self):
         return f"Range({self.__start}, {self.__stop}, {self.__step})"
-
-
-r1 = Range(10, 4, -3)
-# print(r1[-3])
-for i in r1:
-    print(i)

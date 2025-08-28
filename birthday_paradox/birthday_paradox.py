@@ -20,9 +20,20 @@ class BirthdayParadox:
         :param people_count: Number of people in the group.
         :param testing_range: Number of trials/experiments to run (default=1000).
         """
-        self.__people_count = people_count
-        self.__testing_range = testing_range
+        self.__people_count, self.__testing_range = self._input_validation(
+            people_count, testing_range
+        )
+        # self.__people_count = people_count
+        # self.__testing_range = testing_range
         self.__r = Random()  # Random number generator instance
+
+    def _input_validation(self, people_count, testing_range):
+        if not isinstance(people_count, int):
+            raise TypeError("people_count must be an integer")
+        elif not isinstance(testing_range, int):
+            raise TypeError("testing_range must be an integer")
+        else:
+            return people_count, testing_range
 
     # ---- Properties for people count ----
     @property
