@@ -23,8 +23,6 @@ class BirthdayParadox:
         self.__people_count, self.__testing_range = self._input_validation(
             people_count, testing_range
         )
-        # self.__people_count = people_count
-        # self.__testing_range = testing_range
         self.__r = Random()  # Random number generator instance
 
     def _input_validation(self, people_count, testing_range):
@@ -58,7 +56,7 @@ class BirthdayParadox:
         self.__testing_range = new_range
 
     # ---- Generate birthdays ----
-    def generate_birthdays(self):
+    def _generate_birthdays(self):
         """
         Generate random birthdays for one trial.
 
@@ -77,7 +75,7 @@ class BirthdayParadox:
         return birthdays
 
     # ---- Perform multiple trials ----
-    def birthday_trials(self):
+    def _birthday_trials(self):
         """
         Run multiple experiments to generate groups of birthdays.
 
@@ -85,12 +83,12 @@ class BirthdayParadox:
         """
         all_birthdays = []
         for _ in range(self.__testing_range):
-            generate_birthday = self.generate_birthdays()
+            generate_birthday = self._generate_birthdays()
             all_birthdays.append(generate_birthday)
         return all_birthdays
 
     # ---- Count paradox cases ----
-    def count_paradoxes(self):
+    def _count_paradoxes(self):
         """
         Count the number of trials where at least two people
         share the same birthday.
@@ -106,7 +104,7 @@ class BirthdayParadox:
 
         :return: The total number of trials where a birthday match occurred.
         """
-        all_birthdays = self.birthday_trials()
+        all_birthdays = self._birthday_trials()
         paradox_count = 0
         for bd_list in all_birthdays:
             temp_birthday_list = []
@@ -128,7 +126,7 @@ class BirthdayParadox:
 
         :return: Probability (as a percentage) rounded to 2 decimal places.
         """
-        paradox_count = self.count_paradoxes()
+        paradox_count = self._count_paradoxes()
         percentage = round((paradox_count / self.__testing_range) * 100, 2)
         return percentage
 
