@@ -21,10 +21,15 @@ class ChangeCalculator:
         self.__amount_charged = self._charged_amount_validator(
             charged_amount, given_amount
         )
-        self.__amount_given = self._given_amount_validator(given_amount)
+        self.__amount_given = self._given_amount_validator(given_amount, charged_amount)
 
         # Available currency denominations (notes and coins) in descending order
-        self.denominations = (5000, 1000, 500, 100, 50, 20, 10, 5, 2, 1)
+        self.__denominations = (5000, 1000, 500, 100, 50, 20, 10, 5, 2, 1)
+
+    # getter for denominations
+    @property
+    def denominations(self):
+        return self.__denominations
 
     # Getter and Setter for charged amount
     @property
@@ -48,7 +53,9 @@ class ChangeCalculator:
     @amount_given.setter
     def amount_given(self, new_given_amount):
         """Validate and update the given amount."""
-        self.__amount_given = self._given_amount_validator(new_given_amount)
+        self.__amount_given = self._given_amount_validator(
+            new_given_amount, self.__amount_charged
+        )
 
     def _charged_amount_validator(self, charged_amount, given_amount):
         """
@@ -74,7 +81,7 @@ class ChangeCalculator:
         # If all checks pass, return the validated charged_amount
         return charged_amount
 
-    def _given_amount_validator(self, given_amount):
+    def _given_amount_validator(self, given_amount, charged_amount):
         """
         Validate the given amount.
         Raises:
@@ -84,8 +91,8 @@ class ChangeCalculator:
         if not isinstance(given_amount, int):
             raise TypeError("given_amount must be an integer (whole rupee value).")
 
-        if given_amount < 0:
-            raise ValueError("given_amount must be non-negative integer value.")
+        if given_amount < charged_amount:
+            raise ValueError("given_amount cannot be less than charged_amount")
 
         return given_amount
 
@@ -106,7 +113,7 @@ class ChangeCalculator:
         change_breakdown = {}
 
         # Iterate through each denomination
-        for denomination in self.denominations:
+        for denomination in self.__denominations:
             # If no change left, exit early
             if remaining_change < 1:
                 break
@@ -122,12 +129,12 @@ class ChangeCalculator:
                 remaining_change %= denomination
         return change_breakdown
 
-    def _get_punctuation(self, current_index, keys_sequence):
+    def _get_punctuation(self, current_index, keys_length):
         """
         Return a separator: comma if more items follow, else period.
         """
         # If not the last item, use a comma, otherwise a full stop
-        if current_index < len(keys_sequence) - 1:
+        if current_index < keys_length - 1:
             return ","
         return "."
 
@@ -157,7 +164,7 @@ class ChangeCalculator:
 
             # Add proper punctuation depending on position
             current_index = keys_sequence.index(denomination)
-            message += self._get_punctuation(current_index, keys_sequence)
+            message += self._get_punctuation(current_index, len(keys_sequence))
 
         return message
 
@@ -175,5 +182,5 @@ class ChangeCalculator:
         return (
             f"Charged Amount: {self.__amount_charged}\n"
             f"Given Amount: {self.__amount_given}\n"
-            f"Change: {self._format_change_string()}"
+            f"Cash Back: {self._format_change_string()}"
         )

@@ -5,6 +5,9 @@ def test():
     # Create an instance of ChangeCalculator with charged amount 3000 and given amount 5057
     c1 = ChangeCalculator(3000, 5057)
 
+    # print the available denominations
+    print(c1.denominations)
+
     # Get the calculated change as a dictionary from the 'change' property
     change = c1.change
 
@@ -19,6 +22,11 @@ def test():
 
     # Update the charged amount to 600 using the setter
     c1.amount_charged = 600
+
+    # error: given_amount cannot be less than charged_amount
+    # c1.amount_given = 400
+
+    c1.amount_given = 660
 
     # Displays the updated change
     c1.display_change()
