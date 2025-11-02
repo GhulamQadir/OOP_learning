@@ -16,20 +16,9 @@ class Triangle(Polygon):
     """
 
     def __init__(self, sideA, sideB, sideC):
-        self._sideA = self._check_positive_side(sideA)
-        self._sideB = self._check_positive_side(sideB)
-        self._sideC = self._check_positive_side(sideC)
-
-    def _check_positive_side(self, side):
-        """
-        Ensures that a given side length is positive.
-        Raises:
-            ValueError: If the side is zero or negative.
-        """
-
-        if side <= 0:
-            raise ValueError("Side length must be greater than zero.")
-        return side
+        self._sideA = super()._check_positive_side(sideA)
+        self._sideB = super()._check_positive_side(sideB)
+        self._sideC = super()._check_positive_side(sideC)
 
     def _validate_triangle_sides(self):
         """
