@@ -22,3 +22,13 @@ class Polygon(ABC):
     @abstractmethod
     def perimeter(self):
         pass
+
+    def _check_positive_side(self, side):
+        """
+        Ensures that a given side length is positive.
+        Raises:
+            ValueError: If the side is zero or negative.
+        """
+        if side <= 0:
+            raise ValueError("Side length must be greater than zero.")
+        return side
