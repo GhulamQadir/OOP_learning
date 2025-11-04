@@ -1,0 +1,4 @@
+from regular_polygons.regular_polygon_base import RegularPolygon
+from regular_polygons.pentagon import Pentagon
+from regular_polygons.hexagon import Hexagon
+from regular_polygons.octagon import Octagon
