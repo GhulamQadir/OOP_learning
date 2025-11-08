@@ -44,17 +44,13 @@ class Permutations:
         for char in self.__original_text:
             already_checked = False
             for c in unique_chars:
-                # Check if the character is already added to unique_chars
                 if c == char:
                     already_checked = True
                     break
 
-            # If not already in unique_chars, add it
             if not already_checked:
-                for c in self.__original_text:
-                    if c == char:
-                        unique_chars.append(c)
-                        break
+                unique_chars.append(char)
+
         return unique_chars
 
     def factorial(self, n):
